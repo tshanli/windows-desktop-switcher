@@ -27,7 +27,7 @@ return
 ; Current desktop UUID appears to be in HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SessionInfo\1\VirtualDesktops
 ; List of desktops appears to be in HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VirtualDesktops
 ;
-mapDesktopsFromRegistry() 
+mapDesktopsFromRegistry()
 {
     global CurrentDesktop, DesktopCount
 
@@ -126,7 +126,7 @@ _switchDesktopToTarget(targetDesktop)
     focusTheForemostWindow(targetDesktop)
 }
 
-updateGlobalVariables() 
+updateGlobalVariables()
 {
     ; Re-generate the list of desktops and where we fit in that. We do this because
     ; the user may have switched desktops via some other means than the script.
@@ -220,4 +220,21 @@ deleteVirtualDesktop()
     DesktopCount--
     CurrentDesktop--
     OutputDebug, [delete] desktops: %DesktopCount% current: %CurrentDesktop%
+}
+
+MoveCurrentWindowToLeftDesktop() {
+    global CurrentDesktop, DesktopCount
+    updateGlobalVariables()
+    LeftDesktop := CurrentDesktop == 1 ? 1: CurrentDesktop - 1
+    WinGet, activeHwnd, ID, A
+    DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, LeftDesktop - 1)
+    switchDesktopByNumber(LeftDesktop)
+}
+MoveCurrentWindowToRightDesktop() {
+    global CurrentDesktop, DesktopCount
+    updateGlobalVariables()
+    RightDesktop := CurrentDesktop == DesktopCount ? DesktopCount : CurrentDesktop + 1
+    WinGet, activeHwnd, ID, A
+    DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, RightDesktop - 1)
+    switchDesktopByNumber(RightDesktop)
 }
