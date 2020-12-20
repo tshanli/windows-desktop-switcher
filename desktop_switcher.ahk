@@ -225,7 +225,7 @@ deleteVirtualDesktop()
 MoveCurrentWindowToLeftDesktop() {
     global CurrentDesktop, DesktopCount
     updateGlobalVariables()
-    LeftDesktop := CurrentDesktop == 1 ? 1: CurrentDesktop - 1
+    LeftDesktop := CurrentDesktop == 1 ? DesktopCount: CurrentDesktop - 1
     WinGet, activeHwnd, ID, A
     DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, LeftDesktop - 1)
     switchDesktopByNumber(LeftDesktop)
@@ -233,7 +233,7 @@ MoveCurrentWindowToLeftDesktop() {
 MoveCurrentWindowToRightDesktop() {
     global CurrentDesktop, DesktopCount
     updateGlobalVariables()
-    RightDesktop := CurrentDesktop == DesktopCount ? DesktopCount : CurrentDesktop + 1
+    RightDesktop := CurrentDesktop == DesktopCount ? 1 : CurrentDesktop + 1
     WinGet, activeHwnd, ID, A
     DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, RightDesktop - 1)
     switchDesktopByNumber(RightDesktop)
